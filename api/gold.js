@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     const apiCode = process.env.ZzrRpqSkOhfFY3dVWNhTBwo3KzBMNtUzaWm3tSdpgY
 
     const response = await fetch(
-      "آدرس واقعی API نرخی"
+      "https://nerkh-api.ir/api/ZzrRpqSkOhfFY3dVWNhTBwo3KzBMNtUzaWm3tSdpgY/gold/"
     );
 
     const json = await response.json();
