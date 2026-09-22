@@ -1,6 +1,6 @@
 export default async function handler(req, res) {
   try {
-    const apiCode = process.env.NERKH_API_KEY;
+    const apiCode = process.env.ZzrRpqSkOhfFY3dVWNhTBwo3KzBMNtUzaWm3tSdpgY
 
     const response = await fetch(
       "آدرس واقعی API نرخی"
