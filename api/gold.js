@@ -1,15 +1,7 @@
 export default async function handler(req, res) {
   try {
-    const apiKey = process.env.NERKH_API_KEY?.trim();
-
-    if (!apiKey) {
-      return res.status(500).json({
-        error: "NERKH_API_KEY تنظیم نشده"
-      });
-    }
-
     const response = await fetch(
-  "https://nerkh-api.ir/api/ZzrRpqSkOhfFY3dVWNhTBwo3KzBMNtUzaWm3tSdpgY/gold/"
+      "https://nerkh-api.ir/api/ZzrRpqSkOhfFY3dVWNhTBwo3KzBMNtUzaWm3tSdpgY/gold/"
     );
 
     const data = await response.json();
