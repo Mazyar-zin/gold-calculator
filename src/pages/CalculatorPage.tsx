@@ -1,84 +1,75 @@
 import { useEffect, useMemo, useState } from 'react'
-import { calculateGold } from '../lib/calculator'
-import { formatToman } from '../lib/format'
-import { convertKaratPrice, sourcePriceForKarat } from '../lib/goldPrice'
-import type { AppSettings, GoldKarat, HistoryItem } from '../types'
 import { Icon } from '../components/Icon'
 import { MoneyField } from '../components/MoneyField'
 import { NumberField } from '../components/NumberField'
 import { TopBar } from '../components/TopBar'
+import { calculateGold } from '../lib/calculator'
+import { formatToman } from '../lib/format'
+import { convertKaratPrice, priceForKarat } from '../lib/goldPrice'
+import type { AppSettings, GoldKarat } from '../types'
 
 interface Props {
   settings: AppSettings
   onSettingsChange: (settings: AppSettings) => void
-  onAddHistory: (item: HistoryItem) => void
   onMenu: () => void
 }
 
-export function CalculatorPage({ settings, onSettingsChange, onAddHistory, onMenu }: Props) {
+export function CalculatorPage({ settings, onSettingsChange, onMenu }: Props) {
   const [karat, setKarat] = useState<GoldKarat>(settings.defaultKarat)
-  const sourceGramPrice = sourcePriceForKarat(settings, karat)
-  const [gramPrice, setGramPrice] = useState(
-    sourcePriceForKarat(settings, settings.defaultKarat),
+  const [gramPrice, setGramPrice] = useState(() =>
+    priceForKarat(settings, settings.defaultKarat),
   )
   const [weight, setWeight] = useState(0)
   const [detailsOpen, setDetailsOpen] = useState(true)
-  const [savedPulse, setSavedPulse] = useState(false)
+
+  const storedPriceForKarat = priceForKarat(settings, karat)
 
   useEffect(() => {
-    setGramPrice(sourceGramPrice)
-  }, [sourceGramPrice])
+    setGramPrice(storedPriceForKarat)
+  }, [storedPriceForKarat])
 
   const result = useMemo(
-    () => calculateGold({
-      karat,
-      weight,
-      gramPrice,
-      wagePercent: settings.wagePercent,
-      profitPercent: settings.profitPercent,
-      taxPercent: settings.taxPercent,
-    }),
-    [karat, weight, gramPrice, settings.wagePercent, settings.profitPercent, settings.taxPercent],
-  )
-
-  function changeKarat(next: GoldKarat) {
-    if (next === karat) return
-
-    setKarat(next)
-    setGramPrice(convertKaratPrice(gramPrice, karat, next))
-    onSettingsChange({ ...settings, defaultKarat: next })
-  }
-
-  function updatePercent(key: 'wagePercent' | 'profitPercent' | 'taxPercent', value: number) {
-    onSettingsChange({ ...settings, [key]: value })
-  }
-
-  function saveCalculation() {
-    if (weight <= 0 || gramPrice <= 0) return
-
-    const item: HistoryItem = {
-      id: crypto.randomUUID(),
-      createdAt: new Date().toISOString(),
-      input: {
-        karat,
+    () =>
+      calculateGold({
         weight,
         gramPrice,
         wagePercent: settings.wagePercent,
         profitPercent: settings.profitPercent,
         taxPercent: settings.taxPercent,
-      },
-      result,
-    }
+      }),
+    [
+      weight,
+      gramPrice,
+      settings.wagePercent,
+      settings.profitPercent,
+      settings.taxPercent,
+    ],
+  )
 
-    onAddHistory(item)
-    setSavedPulse(true)
-    window.setTimeout(() => setSavedPulse(false), 1400)
+  function changeKarat(next: GoldKarat) {
+    if (next === karat) return
+    setKarat(next)
+    setGramPrice(priceForKarat(settings, next))
+    onSettingsChange({ ...settings, defaultKarat: next })
+  }
+
+  function updateGramPrice(value: number) {
+    setGramPrice(value)
+    const price18 = convertKaratPrice(value, karat, 18)
+    onSettingsChange({ ...settings, goldPrice18: price18 })
+  }
+
+  function updatePercent(
+    key: 'wagePercent' | 'profitPercent' | 'taxPercent',
+    value: number,
+  ) {
+    onSettingsChange({ ...settings, [key]: value })
   }
 
   const percentIcon = <Icon name="percent" size={18} />
 
   return (
-    <main className="screen calculator-screen">
+    <main className="screen">
       <TopBar title="محاسبه‌گر طلا" onMenu={onMenu} />
 
       <section className="core-card">
@@ -106,8 +97,7 @@ export function CalculatorPage({ settings, onSettingsChange, onAddHistory, onMen
           <MoneyField
             label="قیمت هر گرم"
             value={gramPrice}
-            onChange={setGramPrice}
-            compact
+            onChange={updateGramPrice}
           />
 
           <NumberField
@@ -116,7 +106,6 @@ export function CalculatorPage({ settings, onSettingsChange, onAddHistory, onMen
             onChange={setWeight}
             suffix="گرم"
             hint="مثال: 3.25"
-            compact
           />
         </div>
       </section>
@@ -126,37 +115,44 @@ export function CalculatorPage({ settings, onSettingsChange, onAddHistory, onMen
           <NumberField
             label="اجرت"
             value={settings.wagePercent}
-            onChange={(v) => updatePercent('wagePercent', v)}
+            onChange={(value) => updatePercent('wagePercent', value)}
             suffix={percentIcon}
-            compact
+            selectOnFocus
           />
           <NumberField
             label="سود"
             value={settings.profitPercent}
-            onChange={(v) => updatePercent('profitPercent', v)}
+            onChange={(value) => updatePercent('profitPercent', value)}
             suffix={percentIcon}
-            compact
+            selectOnFocus
           />
           <NumberField
             label="مالیات"
             value={settings.taxPercent}
-            onChange={(v) => updatePercent('taxPercent', v)}
+            onChange={(value) => updatePercent('taxPercent', value)}
             suffix={percentIcon}
-            compact
+            selectOnFocus
           />
         </div>
       </section>
 
-      <section className="result-card compact-result">
+      <section className="result-card">
         <div className="result-top">
           <div>
             <span>قیمت نهایی</span>
             <strong>{formatToman(result.total)}</strong>
           </div>
-          <span className="result-karat">{karat.toLocaleString('fa-IR')} عیار</span>
+          <span className="result-karat">
+            {karat.toLocaleString('fa-IR')} عیار
+          </span>
         </div>
 
-        <button className="details-toggle" type="button" onClick={() => setDetailsOpen(!detailsOpen)}>
+        <button
+          className="details-toggle"
+          type="button"
+          onClick={() => setDetailsOpen((open) => !open)}
+          aria-expanded={detailsOpen}
+        >
           <span>جزئیات محاسبه</span>
           <span className={detailsOpen ? 'chevron open' : 'chevron'}>
             <Icon name="chevron" size={17} />
@@ -171,15 +167,6 @@ export function CalculatorPage({ settings, onSettingsChange, onAddHistory, onMen
             <div><span>مالیات</span><b>{formatToman(result.tax)}</b></div>
           </div>
         )}
-
-        <button
-          className="primary-button"
-          type="button"
-          onClick={saveCalculation}
-          disabled={weight <= 0 || gramPrice <= 0}
-        >
-          {savedPulse ? 'ذخیره شد ✓' : 'ذخیره در تاریخچه'}
-        </button>
       </section>
     </main>
   )

@@ -11,11 +11,10 @@ interface Props {
   onNavigate: (page: PageName) => void
 }
 
-const currentItems = [
-  { page: 'calculator' as PageName, label: 'محاسبه قیمت طلا', icon: 'calculator' as const },
+const items = [
+  { page: 'calculator' as PageName, label: 'محاسبه طلا', icon: 'calculator' as const },
   { page: 'reverse' as PageName, label: 'محاسبه معکوس', icon: 'swap' as const },
-  { page: 'chart' as PageName, label: 'نمودار تغییر قیمت', icon: 'chart' as const },
-  { page: 'history' as PageName, label: 'تاریخچه محاسبات', icon: 'history' as const },
+  { page: 'utility' as PageName, label: 'ماشین حساب', icon: 'calculator' as const },
   { page: 'settings' as PageName, label: 'تنظیمات', icon: 'settings' as const },
 ]
 
@@ -37,19 +36,25 @@ export function AppMenu({
         onClick={onClose}
       />
 
-      <aside className={open ? 'app-menu open' : 'app-menu'} aria-hidden={!open}>
+      <aside
+        className={open ? 'app-menu open' : 'app-menu'}
+        aria-hidden={!open}
+        aria-label="قابلیت‌ها"
+      >
         <div className="menu-head">
-          <div>
-            <strong>قابلیت‌ها</strong>
-            <span>محاسبه‌گر طلا</span>
-          </div>
-          <button className="menu-close" type="button" onClick={onClose} aria-label="بستن منو">
-            <Icon name="close" size={20} />
+          <strong>قابلیت‌ها</strong>
+          <button
+            className="menu-close"
+            type="button"
+            onClick={onClose}
+            aria-label="بستن منو"
+          >
+            <Icon name="close" size={18} />
           </button>
         </div>
 
         <div className="menu-group">
-          {currentItems.map((item) => (
+          {items.map((item) => (
             <button
               key={item.page}
               type="button"
@@ -59,48 +64,27 @@ export function AppMenu({
                 onClose()
               }}
             >
-              <span className="menu-item-icon"><Icon name={item.icon} size={19} /></span>
+              <span className="menu-item-icon">
+                <Icon name={item.icon} size={19} />
+              </span>
               <span>{item.label}</span>
             </button>
           ))}
         </div>
 
-        <div className="menu-app-section">
-          {installed ? (
-            <div className="install-state installed">
-              <span className="install-state-icon"><Icon name="check" size={18} /></span>
-              <span>
-                <b>برنامه نصب شده</b>
-                <small>از صفحه اصلی گوشی مثل یک اپ باز می‌شود.</small>
-              </span>
-            </div>
-          ) : canInstall ? (
-            <button
-              className="install-button"
-              type="button"
-              onClick={() => {
-                onInstall()
-                onClose()
-              }}
-            >
-              <span className="install-state-icon"><Icon name="download" size={18} /></span>
-              <span>
-                <b>نصب روی موبایل</b>
-                <small>بدون نیاز به فروشگاه برنامه</small>
-              </span>
-            </button>
-          ) : (
-            <div className="install-state">
-              <span className="install-state-icon"><Icon name="download" size={18} /></span>
-              <span>
-                <b>نصب روی صفحه اصلی</b>
-                <small>از منوی مرورگر «Add to Home Screen» را انتخاب کن.</small>
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className="menu-version">نسخه ۱.۲</div>
+        {!installed && canInstall && (
+          <button
+            className="compact-install-button"
+            type="button"
+            onClick={() => {
+              onInstall()
+              onClose()
+            }}
+          >
+            <Icon name="download" size={17} />
+            <span>نصب برنامه</span>
+          </button>
+        )}
       </aside>
     </>
   )

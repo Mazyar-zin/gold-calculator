@@ -19,7 +19,7 @@ export default defineConfig({
         id: '/',
         name: 'محاسبه‌گر طلا',
         short_name: 'طلا',
-        description: 'محاسبه‌گر شخصی قیمت طلا برای ۱۸ و ۲۴ عیار',
+        description: 'محاسبه‌گر شخصی قیمت طلا و ماشین حساب',
         start_url: '/',
         scope: '/',
         theme_color: '#f5f1e9',
@@ -30,24 +30,9 @@ export default defineConfig({
         dir: 'rtl',
         categories: ['finance', 'utilities'],
         icons: [
-          {
-            src: '/icon-192.png',
-            sizes: '192x192',
-            type: 'image/png',
-            purpose: 'any',
-          },
-          {
-            src: '/icon-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'any',
-          },
-          {
-            src: '/maskable-512.png',
-            sizes: '512x512',
-            type: 'image/png',
-            purpose: 'maskable',
-          },
+          { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/maskable-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
       workbox: {

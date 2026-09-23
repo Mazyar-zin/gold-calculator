@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useState } from 'react'
-import type { AppSettings, GoldKarat } from '../types'
-import { calculateGold } from '../lib/calculator'
-import { formatNumber, formatToman } from '../lib/format'
-import { convertKaratPrice, sourcePriceForKarat } from '../lib/goldPrice'
 import { Icon } from '../components/Icon'
 import { MoneyField } from '../components/MoneyField'
 import { NumberField } from '../components/NumberField'
 import { TopBar } from '../components/TopBar'
+import { calculateGold } from '../lib/calculator'
+import { formatNumber, formatToman } from '../lib/format'
+import { convertKaratPrice, priceForKarat } from '../lib/goldPrice'
+import type { AppSettings, GoldKarat } from '../types'
 
 interface Props {
   settings: AppSettings
@@ -20,20 +20,20 @@ export function ReverseCalculatorPage({
   onMenu,
 }: Props) {
   const [karat, setKarat] = useState<GoldKarat>(settings.defaultKarat)
-  const sourceGramPrice = sourcePriceForKarat(settings, karat)
-  const [gramPrice, setGramPrice] = useState(
-    sourcePriceForKarat(settings, settings.defaultKarat),
+  const [gramPrice, setGramPrice] = useState(() =>
+    priceForKarat(settings, settings.defaultKarat),
   )
   const [budget, setBudget] = useState(0)
 
+  const storedPriceForKarat = priceForKarat(settings, karat)
+
   useEffect(() => {
-    setGramPrice(sourceGramPrice)
-  }, [sourceGramPrice])
+    setGramPrice(storedPriceForKarat)
+  }, [storedPriceForKarat])
 
   const oneGramResult = useMemo(
     () =>
       calculateGold({
-        karat,
         weight: 1,
         gramPrice,
         wagePercent: settings.wagePercent,
@@ -41,7 +41,6 @@ export function ReverseCalculatorPage({
         taxPercent: settings.taxPercent,
       }),
     [
-      karat,
       gramPrice,
       settings.wagePercent,
       settings.profitPercent,
@@ -50,14 +49,11 @@ export function ReverseCalculatorPage({
   )
 
   const estimatedWeight =
-    budget > 0 && oneGramResult.total > 0
-      ? budget / oneGramResult.total
-      : 0
+    budget > 0 && oneGramResult.total > 0 ? budget / oneGramResult.total : 0
 
   const estimatedResult = useMemo(
     () =>
       calculateGold({
-        karat,
         weight: estimatedWeight,
         gramPrice,
         wagePercent: settings.wagePercent,
@@ -65,7 +61,6 @@ export function ReverseCalculatorPage({
         taxPercent: settings.taxPercent,
       }),
     [
-      karat,
       estimatedWeight,
       gramPrice,
       settings.wagePercent,
@@ -76,10 +71,17 @@ export function ReverseCalculatorPage({
 
   function changeKarat(next: GoldKarat) {
     if (next === karat) return
-
     setKarat(next)
-    setGramPrice(convertKaratPrice(gramPrice, karat, next))
+    setGramPrice(priceForKarat(settings, next))
     onSettingsChange({ ...settings, defaultKarat: next })
+  }
+
+  function updateGramPrice(value: number) {
+    setGramPrice(value)
+    onSettingsChange({
+      ...settings,
+      goldPrice18: convertKaratPrice(value, karat, 18),
+    })
   }
 
   function updatePercent(
@@ -92,12 +94,8 @@ export function ReverseCalculatorPage({
   const percentIcon = <Icon name="percent" size={18} />
 
   return (
-    <main className="screen reverse-screen">
+    <main className="screen">
       <TopBar title="محاسبه معکوس" onMenu={onMenu} />
-
-      <section className="reverse-intro">
-        مبلغی که می‌خواهی هزینه کنی را وارد کن تا وزن تقریبی طلا محاسبه شود.
-      </section>
 
       <section className="core-card">
         <div className="karat-row">
@@ -121,16 +119,11 @@ export function ReverseCalculatorPage({
         </div>
 
         <div className="reverse-input-stack">
-          <MoneyField
-            label="مبلغ نهایی"
-            value={budget}
-            onChange={setBudget}
-          />
-
+          <MoneyField label="بودجه" value={budget} onChange={setBudget} />
           <MoneyField
             label="قیمت هر گرم"
             value={gramPrice}
-            onChange={setGramPrice}
+            onChange={updateGramPrice}
           />
         </div>
       </section>
@@ -140,49 +133,38 @@ export function ReverseCalculatorPage({
           <NumberField
             label="اجرت"
             value={settings.wagePercent}
-            onChange={(v) => updatePercent('wagePercent', v)}
+            onChange={(value) => updatePercent('wagePercent', value)}
             suffix={percentIcon}
-            compact
+            selectOnFocus
           />
           <NumberField
             label="سود"
             value={settings.profitPercent}
-            onChange={(v) => updatePercent('profitPercent', v)}
+            onChange={(value) => updatePercent('profitPercent', value)}
             suffix={percentIcon}
-            compact
+            selectOnFocus
           />
           <NumberField
             label="مالیات"
             value={settings.taxPercent}
-            onChange={(v) => updatePercent('taxPercent', v)}
+            onChange={(value) => updatePercent('taxPercent', value)}
             suffix={percentIcon}
-            compact
+            selectOnFocus
           />
         </div>
       </section>
 
       <section className="reverse-result-card">
         <span className="reverse-result-label">وزن تقریبی قابل خرید</span>
-
         <div className="reverse-weight">
-          <strong>{formatNumber(Number(estimatedWeight.toFixed(3)))}</strong>
+          <strong>{formatNumber(estimatedWeight)}</strong>
           <span>گرم</span>
         </div>
 
         <div className="reverse-summary">
-          <div>
-            <span>هزینه تقریبی هر گرم با مخارج</span>
-            <b>{formatToman(oneGramResult.total)}</b>
-          </div>
-          <div>
-            <span>مبلغ محاسبه‌شده</span>
-            <b>{formatToman(estimatedResult.total)}</b>
-          </div>
+          <div><span>هزینه تقریبی هر گرم</span><b>{formatToman(oneGramResult.total)}</b></div>
+          <div><span>قیمت محاسبه‌شده</span><b>{formatToman(estimatedResult.total)}</b></div>
         </div>
-
-        <p className="reverse-note">
-          وزن نمایش‌داده‌شده تقریبی است و بر اساس درصدهای فعلی برنامه محاسبه می‌شود.
-        </p>
       </section>
     </main>
   )

@@ -1,17 +1,9 @@
-export type PriceMode = 'manual' | 'api'
 export type ThemeMode = 'light' | 'dark' | 'system'
-export type PageName = 'calculator' | 'reverse' | 'chart' | 'history' | 'settings'
+export type PageName = 'calculator' | 'reverse' | 'utility' | 'settings'
 export type GoldKarat = 18 | 24
 
 export interface AppSettings {
-  priceMode: PriceMode
-  manualPrice18: number
-  apiPrice18: number
-  apiPrice24: number
-  apiUpdatedAt: string | null
-  apiFetchedAt: string | null
-  apiKey: string
-  apiAutoRefresh: boolean
+  goldPrice18: number
   wagePercent: number
   profitPercent: number
   taxPercent: number
@@ -20,7 +12,6 @@ export interface AppSettings {
 }
 
 export interface CalculationInput {
-  karat: GoldKarat
   weight: number
   gramPrice: number
   wagePercent: number
@@ -34,20 +25,4 @@ export interface CalculationResult {
   profit: number
   tax: number
   total: number
-}
-
-export interface HistoryItem {
-  id: string
-  createdAt: string
-  input: CalculationInput
-  result: CalculationResult
-}
-
-
-export interface PriceSnapshot {
-  id: string
-  createdAt: string
-  source: PriceMode
-  price18: number
-  price24: number
 }

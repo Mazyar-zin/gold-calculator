@@ -3,19 +3,21 @@ import { Icon } from './Icon'
 
 interface Props {
   page: PageName
+  menuOpen: boolean
   onChange: (page: PageName) => void
-  onOpenMenu: () => void
+  onToggleMenu: () => void
 }
 
-export function BottomNav({ page, onChange, onOpenMenu }: Props) {
-  const featuresActive = page === 'calculator' || page === 'reverse' || page === 'chart'
+export function BottomNav({ page, menuOpen, onChange, onToggleMenu }: Props) {
+  const featuresActive = menuOpen || page === 'reverse' || page === 'utility'
 
   return (
     <nav className="bottom-nav" aria-label="ناوبری اصلی">
       <button
         type="button"
         className={featuresActive ? 'nav-item active' : 'nav-item'}
-        onClick={onOpenMenu}
+        onClick={onToggleMenu}
+        aria-expanded={menuOpen}
       >
         <span className="nav-icon"><Icon name="menu" size={20} /></span>
         <span>قابلیت‌ها</span>
@@ -23,11 +25,11 @@ export function BottomNav({ page, onChange, onOpenMenu }: Props) {
 
       <button
         type="button"
-        className={page === 'history' ? 'nav-item active' : 'nav-item'}
-        onClick={() => onChange('history')}
+        className={page === 'calculator' ? 'nav-item active' : 'nav-item'}
+        onClick={() => onChange('calculator')}
       >
-        <span className="nav-icon"><Icon name="history" size={20} /></span>
-        <span>تاریخچه</span>
+        <span className="nav-icon"><Icon name="calculator" size={20} /></span>
+        <span>طلا</span>
       </button>
 
       <button

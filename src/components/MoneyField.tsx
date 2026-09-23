@@ -4,10 +4,15 @@ interface Props {
   label: string
   value: number
   onChange: (value: number) => void
-  compact?: boolean
+  selectOnFocus?: boolean
 }
 
-export function MoneyField({ label, value, onChange, compact = false }: Props) {
+export function MoneyField({
+  label,
+  value,
+  onChange,
+  selectOnFocus = true,
+}: Props) {
   function handleChange(raw: string) {
     const normalized = normalizeDigits(raw).replace(/\./g, '')
     const numeric = Number(normalized)
@@ -15,7 +20,7 @@ export function MoneyField({ label, value, onChange, compact = false }: Props) {
   }
 
   return (
-    <label className={compact ? 'field compact-field money-field' : 'field money-field'}>
+    <label className="field money-field">
       <span className="field-label">{label}</span>
       <span className="input-shell">
         <input
@@ -23,6 +28,12 @@ export function MoneyField({ label, value, onChange, compact = false }: Props) {
           inputMode="numeric"
           value={formatMoneyInput(value)}
           onChange={(event) => handleChange(event.target.value)}
+          onFocus={(event) => {
+            if (selectOnFocus) event.currentTarget.select()
+          }}
+          onClick={(event) => {
+            if (selectOnFocus) event.currentTarget.select()
+          }}
           aria-label={label}
         />
         <span className="field-suffix">تومان</span>

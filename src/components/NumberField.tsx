@@ -9,7 +9,7 @@ interface Props {
   suffix?: ReactNode
   hint?: string
   decimals?: boolean
-  compact?: boolean
+  selectOnFocus?: boolean
 }
 
 export function NumberField({
@@ -19,7 +19,7 @@ export function NumberField({
   suffix,
   hint,
   decimals = true,
-  compact = false,
+  selectOnFocus = false,
 }: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [text, setText] = useState(value === 0 ? '' : String(value))
@@ -42,7 +42,7 @@ export function NumberField({
   }
 
   return (
-    <label className={compact ? 'field compact-field' : 'field'}>
+    <label className="field">
       <span className="field-label">{label}</span>
       <span className="input-shell">
         <input
@@ -50,6 +50,12 @@ export function NumberField({
           inputMode={decimals ? 'decimal' : 'numeric'}
           value={text}
           onChange={(event) => handleChange(event.target.value)}
+          onFocus={(event) => {
+            if (selectOnFocus) event.currentTarget.select()
+          }}
+          onClick={(event) => {
+            if (selectOnFocus) event.currentTarget.select()
+          }}
           onBlur={handleBlur}
           aria-label={label}
         />
