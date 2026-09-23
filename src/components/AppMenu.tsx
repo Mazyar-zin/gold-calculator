@@ -39,7 +39,7 @@ export function AppMenu({
       <aside
         className={open ? 'app-menu open' : 'app-menu'}
         aria-hidden={!open}
-        aria-label="قابلیت‌ها"
+        aria-label="منوی برنامه"
       >
         <div className="menu-head">
           <strong>قابلیت‌ها</strong>

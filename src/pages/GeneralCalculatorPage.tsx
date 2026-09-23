@@ -56,6 +56,7 @@ export function GeneralCalculatorPage({ onMenu }: { onMenu: () => void }) {
   const [waitingForOperand, setWaitingForOperand] = useState(false)
   const [expression, setExpression] = useState('')
   const [memory, setMemory] = useState(0)
+  const [deleteTimer, setDeleteTimer] = useState<number | null>(null)
 
   function currentValue() {
     const value = Number(display)
@@ -153,6 +154,19 @@ export function GeneralCalculatorPage({ onMenu }: { onMenu: () => void }) {
     setDisplay(display.slice(0, -1))
   }
 
+  function startDelete() {
+    backspace()
+    const id = window.setInterval(() => backspace(), 90)
+    setDeleteTimer(id)
+  }
+
+  function stopDelete() {
+    if (deleteTimer) {
+      window.clearInterval(deleteTimer)
+      setDeleteTimer(null)
+    }
+  }
+
   function toggleSign() {
     if (display === '0' || display === 'خطا') return
     setDisplay(display.startsWith('-') ? display.slice(1) : `-${display}`)
@@ -210,7 +224,7 @@ export function GeneralCalculatorPage({ onMenu }: { onMenu: () => void }) {
 
         <div className="calculator-grid">
           <button className="calc-key utility" type="button" onClick={reset}>C</button>
-          <button className="calc-key utility" type="button" onClick={backspace}>⌫</button>
+          <button className="calc-key utility" type="button" onMouseDown={startDelete} onMouseUp={stopDelete} onMouseLeave={stopDelete} onTouchStart={startDelete} onTouchEnd={stopDelete}>⌫</button>
           <button className="calc-key utility" type="button" onClick={percent}>%</button>
           <button className="calc-key operator" type="button" onClick={() => chooseOperator('/')}>÷</button>
 
