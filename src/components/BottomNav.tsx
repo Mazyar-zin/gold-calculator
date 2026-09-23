@@ -3,21 +3,26 @@ import { Icon } from './Icon'
 
 interface Props {
   page: PageName
-  menuOpen: boolean
+  featuresOpen: boolean
   onChange: (page: PageName) => void
-  onToggleMenu: () => void
+  onToggleFeatures: () => void
 }
 
-export function BottomNav({ page, menuOpen, onChange, onToggleMenu }: Props) {
-  const featuresActive = menuOpen || page === 'reverse' || page === 'utility'
+export function BottomNav({
+  page,
+  featuresOpen,
+  onChange,
+  onToggleFeatures,
+}: Props) {
+  const featuresActive = featuresOpen || page === 'reverse' || page === 'utility'
 
   return (
     <nav className="bottom-nav" aria-label="ناوبری اصلی">
       <button
         type="button"
         className={featuresActive ? 'nav-item active' : 'nav-item'}
-        onClick={onToggleMenu}
-        aria-expanded={menuOpen}
+        onClick={onToggleFeatures}
+        aria-expanded={featuresOpen}
       >
         <span className="nav-icon"><Icon name="menu" size={20} /></span>
         <span>قابلیت‌ها</span>

@@ -870,3 +870,399 @@ button:focus-visible, input:focus-visible {
   top: 56px;
   transform-origin: top right;
 }
+
+/* v1.3.6 UX + background polish */
+.app-shell {
+  padding: 0;
+}
+
+.app-frame {
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface) 88%, transparent), transparent 34%),
+    url('/app-bg.svg') center top / cover no-repeat,
+    var(--bg);
+}
+
+.screen {
+  position: relative;
+  z-index: 1;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 12;
+  padding: 4px 0 10px;
+  margin-bottom: 14px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 92%, transparent), color-mix(in srgb, var(--bg) 70%, transparent), transparent);
+  backdrop-filter: blur(10px);
+}
+
+.menu-button,
+.menu-close,
+.feature-menu-close {
+  box-shadow: 0 8px 18px rgba(43, 34, 20, 0.08);
+}
+
+.menu-button:active,
+.menu-close:active,
+.feature-menu-close:active,
+.menu-item:active,
+.feature-item:active,
+.theme-picker button:active,
+.nav-item:active {
+  transform: scale(0.97);
+}
+
+.section-title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.section-title p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.settings-card {
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.theme-picker button {
+  min-height: 42px;
+  font-size: 12px;
+}
+
+.theme-picker button.active {
+  color: var(--gold);
+}
+
+.app-version-card {
+  min-height: 56px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+}
+
+.app-version-card span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.app-version-card strong {
+  color: var(--gold);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+}
+
+.input-shell {
+  min-height: 48px;
+  border-color: color-mix(in srgb, var(--line) 70%, transparent);
+  background: color-mix(in srgb, var(--surface-2) 88%, transparent);
+}
+
+.input-shell input {
+  font-variant-numeric: tabular-nums;
+}
+
+.field-hint {
+  font-size: 10px;
+}
+
+.money-field .field-suffix,
+.field .field-suffix {
+  font-size: 11px;
+}
+
+.result-card,
+.reverse-result-card {
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--gold) 10%, transparent), transparent 42%),
+    linear-gradient(165deg, color-mix(in srgb, var(--result) 95%, #000), var(--result));
+}
+
+.menu-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  background: rgba(5, 8, 12, 0.18);
+}
+
+.top-menu-backdrop,
+.features-backdrop {
+  border-radius: 0;
+}
+
+.app-menu {
+  z-index: 30;
+  top: calc(env(safe-area-inset-top) + 58px);
+  right: 12px;
+  left: 12px;
+  width: auto;
+  max-width: 310px;
+  padding: 12px;
+  border-radius: 22px;
+  border: 1px solid color-mix(in srgb, var(--gold) 12%, var(--line));
+  background: color-mix(in srgb, var(--surface) 95%, transparent);
+}
+
+.menu-head {
+  align-items: flex-start;
+  padding-bottom: 10px;
+}
+
+.menu-head strong {
+  display: block;
+  font-size: 14px;
+}
+
+.menu-head-subtitle {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.menu-group {
+  grid-template-columns: 1fr 1fr;
+}
+
+.menu-item,
+.feature-item {
+  transition: transform .1s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+
+.menu-item {
+  min-height: 58px;
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--surface-2) 90%, transparent);
+}
+
+.feature-menu {
+  position: absolute;
+  z-index: 30;
+  right: 12px;
+  bottom: calc(73px + env(safe-area-inset-bottom));
+  width: min(230px, calc(100% - 24px));
+  padding: 10px;
+  border: 1px solid color-mix(in srgb, var(--gold) 12%, var(--line));
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--surface) 96%, transparent);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-strong);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px) scale(.98);
+  transform-origin: bottom right;
+  transition: opacity .16s ease, transform .16s ease;
+}
+
+.feature-menu.open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.feature-menu-head {
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 2px 8px;
+}
+
+.feature-menu-head strong {
+  font-size: 13px;
+}
+
+.feature-menu-close {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.feature-menu-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.feature-item {
+  min-height: 50px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface-2) 92%, transparent);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.feature-item.active,
+.menu-item.active {
+  box-shadow: 0 10px 24px rgba(182, 138, 45, 0.14);
+}
+
+.feature-item-icon {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 84%, white), var(--surface-2));
+  color: var(--gold);
+  box-shadow: inset 0 -4px 7px rgba(0,0,0,.08), 0 7px 16px rgba(0,0,0,.10);
+}
+
+.feature-item span:last-child {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.bottom-nav {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  transform: none;
+  z-index: 20;
+  border-top-left-radius: 22px;
+  border-top-right-radius: 22px;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.nav-item {
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.nav-icon {
+  width: 36px;
+  height: 32px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--surface) 65%, white), color-mix(in srgb, var(--surface-2) 88%, var(--gold-soft)));
+}
+
+.utility-calculator {
+  background: color-mix(in srgb, var(--surface) 95%, transparent);
+  backdrop-filter: blur(14px);
+}
+
+.calculator-display {
+  min-height: 126px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface) 85%, transparent), color-mix(in srgb, var(--surface-2) 88%, transparent));
+}
+
+.calculator-display strong {
+  font-size: clamp(32px, 9vw, 42px);
+  font-weight: 800;
+}
+
+.memory-row {
+  margin: 12px 0 10px;
+}
+
+.memory-row button {
+  min-height: 38px;
+  border-radius: 11px;
+}
+
+.calc-key {
+  min-height: 58px;
+  border-radius: 16px;
+  box-shadow: 0 7px 16px rgba(0, 0, 0, 0.06);
+}
+
+.calc-key.operator {
+  min-height: 66px;
+  box-shadow: 0 8px 18px rgba(190, 143, 46, 0.18);
+}
+
+.calc-key.equals {
+  box-shadow: 0 10px 20px rgba(173, 125, 31, 0.26);
+}
+
+:root[data-theme="dark"] .app-frame {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.02), transparent 34%),
+    url('/app-bg.svg') center top / cover no-repeat,
+    var(--bg);
+}
+
+:root[data-theme="dark"] .settings-card,
+:root[data-theme="dark"] .app-version-card,
+:root[data-theme="dark"] .utility-calculator,
+:root[data-theme="dark"] .app-menu,
+:root[data-theme="dark"] .feature-menu,
+:root[data-theme="dark"] .bottom-nav {
+  background: color-mix(in srgb, var(--surface) 92%, rgba(10, 14, 18, 0.92));
+}
+
+:root[data-theme="dark"] .nav-icon,
+:root[data-theme="dark"] .menu-item-icon,
+:root[data-theme="dark"] .feature-item-icon {
+  background: linear-gradient(145deg, #20262d, #171c22);
+  box-shadow: inset 0 -4px 7px rgba(0,0,0,.28), 0 10px 16px rgba(0,0,0,.18);
+}
+
+:root[data-theme="dark"] .calc-key.utility {
+  color: #ccd2da;
+  background: #222a32;
+}
+
+:root[data-theme="dark"] .calc-key.number {
+  background: #1a2027;
+}
+
+:root[data-theme="dark"] .calculator-display,
+:root[data-theme="dark"] .input-shell {
+  background: #1a2027;
+}
+
+:root[data-theme="dark"] .theme-picker button.active,
+:root[data-theme="dark"] .karat-switch button.active {
+  color: #f4cf83;
+  background: #181d23;
+}
+
+@media (max-width: 360px) {
+  .app-menu {
+    left: 10px;
+    right: 10px;
+    max-width: none;
+  }
+
+  .feature-menu {
+    width: calc(100% - 20px);
+    right: 10px;
+  }
+
+  .feature-item span:last-child,
+  .menu-item > span:last-child {
+    font-size: 10px;
+  }
+}

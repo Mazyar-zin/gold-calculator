@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './styles.css'
 import { AppMenu } from './components/AppMenu'
 import { BottomNav } from './components/BottomNav'
+import { FeatureMenu } from './components/FeatureMenu'
 import { usePwaInstall } from './hooks/usePwaInstall'
 import { saveSettings, loadSettings } from './lib/storage'
 import { CalculatorPage } from './pages/CalculatorPage'
@@ -13,6 +14,7 @@ import type { AppSettings, PageName } from './types'
 export default function App() {
   const [page, setPage] = useState<PageName>('calculator')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [featuresOpen, setFeaturesOpen] = useState(false)
   const [settings, setSettings] = useState<AppSettings>(() => loadSettings())
   const { installed, canInstall, install } = usePwaInstall()
 
@@ -46,6 +48,17 @@ export default function App() {
   function navigate(nextPage: PageName) {
     setPage(nextPage)
     setMenuOpen(false)
+    setFeaturesOpen(false)
+  }
+
+  function openTopMenu() {
+    setFeaturesOpen(false)
+    setMenuOpen(true)
+  }
+
+  function toggleFeaturesMenu() {
+    setMenuOpen(false)
+    setFeaturesOpen((open) => !open)
   }
 
   let content
@@ -54,25 +67,21 @@ export default function App() {
       <ReverseCalculatorPage
         settings={settings}
         onSettingsChange={setSettings}
-        onMenu={() => setMenuOpen(true)}
+        onMenu={openTopMenu}
       />
     )
   } else if (page === 'utility') {
-    content = <GeneralCalculatorPage onMenu={() => setMenuOpen(true)} />
+    content = <GeneralCalculatorPage onMenu={openTopMenu} />
   } else if (page === 'settings') {
     content = (
-      <SettingsPage
-        settings={settings}
-        onChange={setSettings}
-        onMenu={() => setMenuOpen(true)}
-      />
+      <SettingsPage settings={settings} onChange={setSettings} onMenu={openTopMenu} />
     )
   } else {
     content = (
       <CalculatorPage
         settings={settings}
         onSettingsChange={setSettings}
-        onMenu={() => setMenuOpen(true)}
+        onMenu={openTopMenu}
       />
     )
   }
@@ -92,11 +101,18 @@ export default function App() {
           onNavigate={navigate}
         />
 
+        <FeatureMenu
+          open={featuresOpen}
+          page={page}
+          onClose={() => setFeaturesOpen(false)}
+          onNavigate={navigate}
+        />
+
         <BottomNav
           page={page}
-          menuOpen={menuOpen}
+          featuresOpen={featuresOpen}
           onChange={navigate}
-          onToggleMenu={() => setMenuOpen((open) => !open)}
+          onToggleFeatures={toggleFeaturesMenu}
         />
       </div>
     </div>

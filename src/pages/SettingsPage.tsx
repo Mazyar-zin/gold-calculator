@@ -2,8 +2,6 @@ import { Icon } from '../components/Icon'
 import { MoneyField } from '../components/MoneyField'
 import { NumberField } from '../components/NumberField'
 import { TopBar } from '../components/TopBar'
-import { formatToman } from '../lib/format'
-import { priceForKarat } from '../lib/goldPrice'
 import type { AppSettings, ThemeMode } from '../types'
 
 interface Props {
@@ -11,6 +9,8 @@ interface Props {
   onChange: (settings: AppSettings) => void
   onMenu: () => void
 }
+
+const APP_VERSION = '1.3.6'
 
 export function SettingsPage({ settings, onChange, onMenu }: Props) {
   function set<K extends keyof AppSettings>(key: K, value: AppSettings[K]) {
@@ -30,7 +30,10 @@ export function SettingsPage({ settings, onChange, onMenu }: Props) {
       />
 
       <section className="settings-section">
-        <div className="section-title"><h2>قیمت طلا</h2></div>
+        <div className="section-title">
+          <h2>قیمت طلا</h2>
+          <p>هر دو قیمت به تومان ذخیره می‌شوند و بعد از بستن برنامه باقی می‌مانند.</p>
+        </div>
         <div className="settings-card price-settings-card">
           <MoneyField
             label="قیمت هر گرم طلای ۱۸ عیار"
@@ -46,7 +49,10 @@ export function SettingsPage({ settings, onChange, onMenu }: Props) {
       </section>
 
       <section className="settings-section">
-        <div className="section-title"><h2>درصدهای پیش‌فرض</h2></div>
+        <div className="section-title">
+          <h2>درصدهای پیش‌فرض</h2>
+          <p>با لمس هر فیلد، مقدار فعلی انتخاب می‌شود تا سریع‌تر عدد جدید را وارد کنی.</p>
+        </div>
         <div className="settings-card settings-percent-grid">
           <NumberField
             label="اجرت"
@@ -73,28 +79,34 @@ export function SettingsPage({ settings, onChange, onMenu }: Props) {
       </section>
 
       <section className="settings-section">
-        <div className="section-title"><h2>ظاهر</h2></div>
-        <div className="theme-picker">
-          {[
-            ['light', 'روشن'],
-            ['dark', 'تیره'],
-            ['system', 'خودکار'],
-          ].map(([value, label]) => (
-            <button
-              key={value}
-              type="button"
-              onClick={() => set('theme', value as ThemeMode)}
-              className={settings.theme === value ? 'active' : ''}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="section-title">
+          <h2>ظاهر برنامه</h2>
+          <p>حالت نمایش را به صورت روشن، تیره یا هماهنگ با دستگاه انتخاب کن.</p>
+        </div>
+        <div className="settings-card">
+          <div className="theme-picker">
+            {[
+              ['light', 'روشن'],
+              ['dark', 'تیره'],
+              ['system', 'خودکار'],
+            ].map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => set('theme', value as ThemeMode)}
+                className={settings.theme === value ? 'active' : ''}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       <section className="settings-section app-version-section">
-        <div className="app-version">
-          نسخه برنامه: 1.3.5
+        <div className="app-version-card">
+          <span>نسخه برنامه</span>
+          <strong>{APP_VERSION}</strong>
         </div>
       </section>
     </main>

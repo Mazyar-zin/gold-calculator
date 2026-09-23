@@ -30,7 +30,7 @@ export function AppMenu({
   return (
     <>
       <button
-        className={open ? 'menu-backdrop open' : 'menu-backdrop'}
+        className={open ? 'menu-backdrop open top-menu-backdrop' : 'menu-backdrop top-menu-backdrop'}
         type="button"
         aria-label="بستن منو"
         onClick={onClose}
@@ -42,13 +42,11 @@ export function AppMenu({
         aria-label="منوی برنامه"
       >
         <div className="menu-head">
-          <strong>قابلیت‌ها</strong>
-          <button
-            className="menu-close"
-            type="button"
-            onClick={onClose}
-            aria-label="بستن منو"
-          >
+          <div>
+            <strong>منوی برنامه</strong>
+            <span className="menu-head-subtitle">دسترسی سریع به صفحات و ابزارها</span>
+          </div>
+          <button className="menu-close" type="button" onClick={onClose} aria-label="بستن منو">
             <Icon name="close" size={18} />
           </button>
         </div>
@@ -82,7 +80,7 @@ export function AppMenu({
             }}
           >
             <Icon name="download" size={17} />
-            <span>نصب برنامه</span>
+            <span>نصب برنامه روی موبایل</span>
           </button>
         )}
       </aside>
