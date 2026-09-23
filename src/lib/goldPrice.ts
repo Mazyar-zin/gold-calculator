@@ -2,7 +2,7 @@ import type { AppSettings, GoldKarat } from '../types'
 
 export function priceForKarat(settings: AppSettings, karat: GoldKarat): number {
   if (karat === 18) return settings.goldPrice18
-  return Math.round(settings.goldPrice18 * (24 / 18))
+  return settings.goldPrice24
 }
 
 export function convertKaratPrice(

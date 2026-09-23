@@ -37,10 +37,11 @@ export function SettingsPage({ settings, onChange, onMenu }: Props) {
             value={settings.goldPrice18}
             onChange={(value) => set('goldPrice18', value)}
           />
-          <div className="derived-price-row">
-            <span>طلای ۲۴ عیار</span>
-            <strong>{formatToman(priceForKarat(settings, 24))}</strong>
-          </div>
+          <MoneyField
+            label="قیمت هر گرم طلای ۲۴ عیار"
+            value={settings.goldPrice24}
+            onChange={(value) => set('goldPrice24', value)}
+          />
         </div>
       </section>
 

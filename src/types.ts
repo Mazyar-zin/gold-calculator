@@ -4,6 +4,7 @@ export type GoldKarat = 18 | 24
 
 export interface AppSettings {
   goldPrice18: number
+  goldPrice24: number
   wagePercent: number
   profitPercent: number
   taxPercent: number

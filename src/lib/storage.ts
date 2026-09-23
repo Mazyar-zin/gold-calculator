@@ -7,6 +7,7 @@ const LEGACY_PRICE_HISTORY_KEY = 'goldcalc.price-history.v1'
 
 export const defaultSettings: AppSettings = {
   goldPrice18: 23_700_000,
+  goldPrice24: Math.round(23_700_000 * (24 / 18)),
   wagePercent: 15,
   profitPercent: 7,
   taxPercent: 10,
@@ -32,6 +33,7 @@ function validKarat(value: unknown): GoldKarat {
 function sanitize(value: Partial<AppSettings> | null | undefined): AppSettings {
   return {
     goldPrice18: finiteNumber(value?.goldPrice18, defaultSettings.goldPrice18),
+    goldPrice24: finiteNumber(value?.goldPrice24, defaultSettings.goldPrice24),
     wagePercent: finiteNumber(value?.wagePercent, defaultSettings.wagePercent),
     profitPercent: finiteNumber(value?.profitPercent, defaultSettings.profitPercent),
     taxPercent: finiteNumber(value?.taxPercent, defaultSettings.taxPercent),
@@ -43,6 +45,7 @@ function sanitize(value: Partial<AppSettings> | null | undefined): AppSettings {
 function migrateLegacy(value: Record<string, unknown>): AppSettings {
   const migrated = sanitize({
     goldPrice18: value.manualPrice18 as number,
+    goldPrice24: value.manualPrice24 as number,
     wagePercent: value.wagePercent as number,
     profitPercent: value.profitPercent as number,
     taxPercent: value.taxPercent as number,
