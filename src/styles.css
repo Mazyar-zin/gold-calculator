@@ -846,3 +846,27 @@ button:focus-visible, input:focus-visible {
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Final UI polish: 3D navigation icons */
+.nav-icon,
+.menu-item-icon {
+  transform: translateZ(0);
+  box-shadow: inset 0 -3px 5px rgba(0,0,0,.08), 0 5px 12px rgba(0,0,0,.12);
+}
+
+.nav-item.active .nav-icon {
+  transform: translateY(-2px);
+  box-shadow: inset 0 -4px 6px rgba(0,0,0,.12), 0 8px 18px rgba(0,0,0,.16);
+}
+
+.nav-icon svg,
+.menu-item-icon svg {
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,.18));
+}
+
+/* Keep top menu attached to header container */
+.app-menu {
+  top: 56px;
+  transform-origin: top right;
+}
