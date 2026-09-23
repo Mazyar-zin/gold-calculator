@@ -91,6 +91,12 @@ export function SettingsPage({ settings, onChange, onMenu }: Props) {
           ))}
         </div>
       </section>
+
+      <section className="settings-section app-version-section">
+        <div className="app-version">
+          نسخه برنامه: 1.3.5
+        </div>
+      </section>
     </main>
   )
 }
