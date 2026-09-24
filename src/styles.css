@@ -1287,3 +1287,73 @@ button:focus-visible, input:focus-visible {
   font-weight: 700;
   font-size: 13px;
 }
+
+
+/* v1.9.0 UX compact mobile layout */
+.app-frame {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.screen {
+  height: calc(100dvh - 72px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  overflow: hidden;
+  padding-top: 10px;
+  padding-bottom: 8px;
+}
+
+.core-card,
+.percent-card,
+.settings-card,
+.utility-calculator {
+  border-radius: 16px;
+}
+
+.core-card {
+  padding: 10px;
+  margin-bottom: 8px;
+}
+
+.topbar {
+  min-height: 40px;
+  margin-bottom: 8px;
+}
+
+.topbar h1 {
+  font-size: 18px;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.quick-actions button {
+  min-height: 42px;
+  border-radius: 12px;
+}
+
+.bottom-nav {
+  height: 64px;
+}
+
+/* prevent accidental page growth on mobile */
+@media (max-height: 750px) {
+  .screen {
+    padding-top: 6px;
+  }
+
+  .field {
+    gap: 3px;
+  }
+
+  .field input {
+    min-height: 42px;
+  }
+
+  .core-card {
+    padding: 8px;
+  }
+}
