@@ -1,5 +1,5 @@
 export type ThemeMode = 'light' | 'dark' | 'system'
-export type PageName = 'calculator' | 'reverse' | 'utility' | 'settings'
+export type PageName = 'calculator' | 'reverse' | 'utility' | 'tools' | 'settings'
 export type GoldKarat = 18 | 24
 
 export interface AppSettings {

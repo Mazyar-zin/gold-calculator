@@ -9,6 +9,7 @@ import { CalculatorPage } from './pages/CalculatorPage'
 import { GeneralCalculatorPage } from './pages/GeneralCalculatorPage'
 import { ReverseCalculatorPage } from './pages/ReverseCalculatorPage'
 import { SettingsPage } from './pages/SettingsPage'
+import { ToolsPage } from './pages/ToolsPage'
 import type { AppSettings, PageName } from './types'
 
 export default function App() {
@@ -62,7 +63,9 @@ export default function App() {
   }
 
   let content
-  if (page === 'reverse') {
+  if (page === 'tools') {
+    content = <ToolsPage onMenu={openTopMenu} />
+  } else if (page === 'reverse') {
     content = (
       <ReverseCalculatorPage
         settings={settings}

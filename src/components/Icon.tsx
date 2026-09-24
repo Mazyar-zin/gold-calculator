@@ -9,6 +9,7 @@ type IconName =
   | 'close'
   | 'swap'
   | 'download'
+  | 'tools'
 
 export function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
   const common = {
@@ -32,6 +33,7 @@ export function Icon({ name, size = 22 }: { name: IconName; size?: number }) {
     close: <><path d="m6 6 12 12M18 6 6 18"/></>,
     swap: <><path d="M7 7h11l-3-3M17 17H6l3 3"/></>,
     download: <><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></>,
+    tools: <><path d="M14.7 6.3a4 4 0 0 0-5.6 5.6L4 17l3 3 5.1-5.1a4 4 0 0 0 5.6-5.6l-2.1 2.1-2-2 2.1-2.1Z"/></>,
   }
 
   return <svg {...common}>{paths[name]}</svg>

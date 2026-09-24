@@ -11,6 +11,7 @@ interface Props {
 const items = [
   { page: 'reverse' as PageName, label: 'محاسبه معکوس', icon: 'swap' as const },
   { page: 'utility' as PageName, label: 'ماشین حساب', icon: 'calculator' as const },
+  { page: 'tools' as PageName, label: 'تبدیل‌ها', icon: 'tools' as const },
 ]
 
 export function FeatureMenu({ open, page, onClose, onNavigate }: Props) {

@@ -1266,3 +1266,24 @@ button:focus-visible, input:focus-visible {
     font-size: 10px;
   }
 }
+
+.tool-card {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.tool-card h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.tool-result {
+  min-height: 44px;
+  padding: 12px;
+  border-radius: 14px;
+  background: var(--surface-2);
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 13px;
+}
