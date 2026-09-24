@@ -10,7 +10,7 @@ interface Props {
   onMenu: () => void
 }
 
-const APP_VERSION = '1.7.1'
+const APP_VERSION = '1.8.0'
 
 export function SettingsPage({ settings, onChange, onMenu }: Props) {
   function set<K extends keyof AppSettings>(key: K, value: AppSettings[K]) {

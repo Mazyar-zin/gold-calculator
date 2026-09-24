@@ -2,35 +2,42 @@ import { useState } from 'react'
 import { TopBar } from '../components/TopBar'
 import { NumberField } from '../components/NumberField'
 import { formatNumber } from '../lib/format'
+import { convertPriceKarat } from '../lib/tools/karatConverter'
+import { gramToMithqal, mithqalToGram } from '../lib/tools/mithqalConverter'
+import { amountFromWeight, weightFromAmount } from '../lib/tools/weightCalculator'
+import { addPercent } from '../lib/tools/percentageCalculator'
 
 export function ToolsPage({ onMenu }: { onMenu: () => void }) {
-  const [karat18, setKarat18] = useState(1000000)
-  const [weight, setWeight] = useState(1)
-  const [mesghal, setMesghal] = useState(0)
+  const [price18, setPrice18] = useState(1000000)
+  const [gram, setGram] = useState(1)
+  const [mithqal, setMithqal] = useState(0)
+  const [amount, setAmount] = useState(10000000)
+  const [percent, setPercent] = useState(9)
 
-  const karat24 = Math.round(karat18 * (24 / 18))
-  const mesghalValue = mesghal * 4.6083
-  const gramValue = weight / 4.6083
-
-  return (
-    <main className="screen">
-      <TopBar title="ابزارهای طلا" onMenu={onMenu} />
-      <section className="settings-card tool-card">
-        <h2>تبدیل عیار</h2>
-        <NumberField label="قیمت ۱۸ عیار" value={karat18} onChange={setKarat18} decimals={false} />
-        <div className="tool-result">قیمت ۲۴ عیار: {formatNumber(karat24)} تومان</div>
-      </section>
-      <section className="settings-card tool-card">
-        <h2>تبدیل وزن</h2>
-        <NumberField label="گرم" value={weight} onChange={setWeight} />
-        <div className="tool-result">مثقال: {formatNumber(gramValue)}</div>
-        <NumberField label="مثقال" value={mesghal} onChange={setMesghal} />
-        <div className="tool-result">گرم: {formatNumber(mesghalValue)}</div>
-      </section>
-      <section className="settings-card tool-card">
-        <h2>ابزار سریع</h2>
-        <div className="tool-result">محاسبه درصد و اختلاف قیمت در نسخه‌های بعدی همین بخش تکمیل می‌شود.</div>
-      </section>
-    </main>
-  )
+  return <main className="screen">
+    <TopBar title="ابزارهای طلا" onMenu={onMenu} />
+    <section className="settings-card tool-card">
+      <h2>تبدیل عیار</h2>
+      <NumberField label="قیمت ۱۸ عیار" value={price18} onChange={setPrice18} decimals={false}/>
+      <div className="tool-result">قیمت معادل ۲۴ عیار: {formatNumber(convertPriceKarat(price18,18,24))}</div>
+    </section>
+    <section className="settings-card tool-card">
+      <h2>گرم و مثقال</h2>
+      <NumberField label="گرم" value={gram} onChange={setGram}/>
+      <div className="tool-result">مثقال: {formatNumber(gramToMithqal(gram))}</div>
+      <NumberField label="مثقال" value={mithqal} onChange={setMithqal}/>
+      <div className="tool-result">گرم: {formatNumber(mithqalToGram(mithqal))}</div>
+    </section>
+    <section className="settings-card tool-card">
+      <h2>وزن و مبلغ</h2>
+      <NumberField label="مبلغ" value={amount} onChange={setAmount} decimals={false}/>
+      <div className="tool-result">وزن با قیمت فعلی: {formatNumber(weightFromAmount(amount, price18))} گرم</div>
+      <div className="tool-result">ارزش ۱ گرم: {formatNumber(amountFromWeight(gram, price18))}</div>
+    </section>
+    <section className="settings-card tool-card">
+      <h2>درصد</h2>
+      <NumberField label="درصد" value={percent} onChange={setPercent}/>
+      <div className="tool-result">افزایش مبلغ: {formatNumber(addPercent(amount, percent))}</div>
+    </section>
+  </main>
 }
