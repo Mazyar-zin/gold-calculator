@@ -13,8 +13,8 @@ const operatorLabel: Record<Operator, string> = {
 function calculate(left: number, right: number, operator: Operator) {
   let value = 0
 
-  if (operator === '+') value = left + right
-  if (operator === '-') value = left - right
+  if (operator === '+') value = left + (left * right / 100)
+  if (operator === '-') value = left - (left * right / 100)
   if (operator === '*') value = left * right
   if (operator === '/') {
     if (right === 0) return null

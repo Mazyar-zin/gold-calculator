@@ -1,0 +1,2 @@
+GoldCalculator v2.0.0
+Percentage calculator fixed: 1000 + 3% = 1030
